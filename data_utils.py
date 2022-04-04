@@ -18,21 +18,14 @@ def get_meta(metadata_dir='metadata'):
             os.path.join(metadata_dir, 'elwha.json'),
         ]
     
-def get_annotation_fps(data_dir):
+def get_annotation_fps(metadata_dir='metadata', annotation_dir='annotations'):
     """
     Map each location to a list of annotation filepaths, one per clip.
-    
-    Assumes data_dir contains two subdirectories:
-        metadata/
-            contains location-level metadata jsons
-        annotations/
-            contains clip-level annotation jsons
     
     Return: dict
         location_name -> [ list of clip annotation filepaths ]
     """
-    meta = get_meta(os.path.join(data_dir, 'metadata'))
-    annotation_dir = os.path.join(data_dir, 'annotations')
+    meta = get_meta(metadata_dir)
     
     location_to_clips = {}
     for loc in meta:
@@ -44,7 +37,24 @@ def get_annotation_fps(data_dir):
         
     return location_to_clips
 
-def multi(func, args, num_cores=min(32, max(0,os.cpu_count()-1))): #num_cores=os.cpu_count()-1):
+def get_annotation_fps_mot(metadata_dir='metadata', annotation_dir='annotations'): #annotation_dir, dumps, tracker_name, use_v2=False):
+    meta = get_meta(metadata_dir)
+    
+    location_to_clips = {}
+    for loc in meta:
+        js = json.load(open(loc, "r"))
+        clips_in_loc = [ c['clip_name'] for c in js ]
+        loc_name = os.path.basename(loc).replace(".json","")
+#         clip_fps = glob.glob(os.path.join(annotation_dir, loc_name) + "/*.json")
+        
+        
+        jsons = glob.glob(annotation_dir+"/*"+loc_name+f"*/{tracker_name}/*.json")
+        clip_fps = [ j for j in jsons if os.path.basename(j).split(".")[0] in clips_in_dump ]
+        
+        location_to_clips[loc_name] = clip_fps
+    return batch_to_clips
+
+def multi(func, args, num_cores=min(32, max(0, os.cpu_count()-1))):
     """
     Run multiprocessing with a progress bar.
     
