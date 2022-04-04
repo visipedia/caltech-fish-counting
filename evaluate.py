@@ -1,24 +1,17 @@
-import sys
-import os
-current_dir = os.path.dirname(os.path.realpath(__file__))
-trackeval_dir = os.path.join(current_dir, "lib/TrackEval/")
-if not trackeval_dir in sys.path: 
-    sys.path.append(trackeval_dir)
-
 import argparse
 from collections import defaultdict
-import copy
-import glob
 import json
 import math
-import pandas as pd
-from tqdm import tqdm
+import os
+import sys
 
+# TrackEval imports - make sure the repo is correctly cloned at lib/TrackEval
+current_dir = os.path.dirname(os.path.realpath(__file__))
+trackeval_dir = os.path.join(current_dir, "lib/TrackEval/")
+if not trackeval_dir in sys.path: sys.path.append(trackeval_dir)
 import trackeval
 from trackeval import _timing
 from trackeval.metrics._base_metric import _BaseMetric
-
-from data_utils import get_meta
 
 
 class nMAE(_BaseMetric):
@@ -135,6 +128,19 @@ def get_default_eval_config(quiet=False):
 
 def get_default_metrics_config():
     return {'METRICS': ['CLEAR', 'Identity', 'nMAE'], 'THRESHOLD': 0.5}
+
+def get_meta(metadata_dir='metadata'):
+    """
+    Get all metadata filepaths.
+    """
+    return [
+            os.path.join(metadata_dir, 'kenai-train.json'),
+            os.path.join(metadata_dir, 'kenai-val.json'),
+            os.path.join(metadata_dir, 'kenai-rightbank.json'),
+            os.path.join(metadata_dir, 'kenai-channel.json'),
+            os.path.join(metadata_dir, 'nushagak.json'),
+            os.path.join(metadata_dir, 'elwha.json'),
+        ]
 
 def evaluate(results_dir, anno_dir, metadata_dir, tracker_name, quiet, iou_thresh=0.5):
     meta = get_meta(metadata_dir)
