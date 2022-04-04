@@ -44,7 +44,7 @@ def get_annotation_fps(data_dir):
         
     return location_to_clips
 
-def multi(func, args, num_cores=os.cpu_count()-1):
+def multi(func, args, num_cores=min(32, max(0,os.cpu_count()-1))): #num_cores=os.cpu_count()-1):
     """
     Run multiprocessing with a progress bar.
     
