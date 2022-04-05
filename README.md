@@ -146,7 +146,7 @@ git submodule update
 
 ### Evaluation
 
-We provide evaluation code using the [TrackEval](https://github.com/JonathonLuiten/TrackEval) codebase. We extend the codebase with a custom metric `nMAE` as described in the paper:
+We provide evaluation code using the [TrackEval](https://github.com/JonathonLuiten/TrackEval) codebase. In addition to the [CLEAR](https://link.springer.com/article/10.1155/2008/246309) and [ID](https://arxiv.org/abs/1609.01775) tracking metrics, we extend the TrackEval codebase with a custom metric `nMAE` as described in the paper:
 
 <img src="https://render.githubusercontent.com/render/math?math=nMAE = \frac{\frac{1}{N}\sum_{i=1}^{N} E_i}{\frac{1}{N}\sum_{i=1}^{N} \hat{z}_i} = \frac{\sum_{i=1}^{N} E_i}{\sum_{i=1}^{N} \hat{z}_i}">, 
 
