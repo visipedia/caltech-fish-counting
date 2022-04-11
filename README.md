@@ -7,7 +7,7 @@ Resources for the Caltech Fish Counting Dataset, as described in [link to paper]
 This repository includes:
 - [x] Links to download the dataset and annotations
 - [x] Evaluation code to reproduce our results and evaluate new algorithms
-- [ ] Scripts to convert raw sonar frames into the enhanced format used by the Baseline++ method in the paper
+- [x] A script to convert raw sonar frames into the enhanced format used by the Baseline++ method in the paper
 
 ## Data Download
 
@@ -17,9 +17,13 @@ Data can be downloaded from AWS using the following links.
 
 - Running `md5sum` on the tar.gz file should produce: `176648e618fc5013db972aa7ded01517  fish_counting_frames.tar.gz`
 
-**Metadata [xx MB]:** [Link to download](link to download)
+**Metadata [54 KB]:** [Link to download](link to download)
 
-**Annotations [xx MB]:** [Link to download](link to download)
+- Running `md5sum` on the tar.gz file should produce: `152286bd6f25f965aadf41e8a0c44140  fish_counting_metadata.tar.gz`
+
+**Annotations [5.1 MB]:** [Link to download](link to download)
+
+- Running `md5sum` on the tar.gz file should produce: `36492ff6fb076ed1922ea7881deb1aa2  fish_counting_annotations.tar.gz`
 
 ## Data Format
 
@@ -49,7 +53,7 @@ frames/
 The 3-channel frames used by our Baseline++ method can be generated using `convert.py`:
 
 ```
-python convert.py --in PATH/TO/frames --out PATH/TO/OUTPUT/DIRECTORY
+python convert.py --in_dir PATH/TO/frames/raw --out_dir PATH/TO/OUTPUT/DIRECTORY
 ```
 
 The directory structure will be maintained.
