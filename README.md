@@ -1,4 +1,5 @@
-<img src="assets/examples.gif" width=100%>
+<!-- <img src="assets/examples.gif" width=100%> -->
+![Example frames from the Fish Counting dataset indicating various challenges.](assets/exframes.png)
 
 # Caltech Fish Counting Dataset
 
