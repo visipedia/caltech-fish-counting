@@ -14,6 +14,20 @@ from trackeval import _timing
 from trackeval.metrics._base_metric import _BaseMetric
 
 
+def norm(bbox, w, h):
+    """
+    Convert a bounding box from un-normalized, 1-indexed (MOT format) to 
+    normalized, 0-indexed.
+    
+    Args:
+        bbox: list of length 4, [x,y,w,h] 1-indexed.
+        w: image width
+        h: image height
+    """
+    bb = bbox.copy()
+    bb = [ (bb[0] - 1) / w, (bb[1] - 1) / h, bb[2] / w, bb[3] / h ]
+    return bb
+
 class nMAE(_BaseMetric):
     """
     A TrackEval-compatible metric for normalized Mean Absolute Error (nMAE).
@@ -26,9 +40,19 @@ class nMAE(_BaseMetric):
         self.float_fields = ['nMAE']
         self.summary_fields = self.fields = self.integer_fields + self.float_fields
         self.filter_dist = filter_dist
+        self.seq_dims = config['SEQ_DIMS']
     
     @staticmethod
-    def count(tracks, filter_dist=0.0):
+    def count(tracks, filter_dist=0.05):
+        """
+        Args:
+            tracks: dict, { track_id -> [bbox0, bbox1, ...] }
+                    bboxes must be **normalized** to height and width of frame
+            filter_dist: float, normalized minimum distance to be considered a valid track.
+                                (used to filter stationary fish)
+        Return:
+            tuple, (right_count, left_count)
+        """
         left = 0
         right = 0
         for track in tracks.values():
@@ -56,6 +80,7 @@ class nMAE(_BaseMetric):
     
     @_timing.time
     def eval_sequence(self, data):
+        w, h = self.seq_dims[data['seq']]
         # map track IDs -> all dets in track
         gt_tracks = defaultdict(list)
         pred_tracks = defaultdict(list)
@@ -63,9 +88,9 @@ class nMAE(_BaseMetric):
         # sort all ground truth & predicted into tracks
         for gt_ids, tracker_ids, gt_dets, tracker_dets in zip (data['gt_ids'], data['tracker_ids'], data['gt_dets'], data['tracker_dets']):
             for gti, gtd in zip(gt_ids, gt_dets):
-                gt_tracks[gti].append(gtd)
+                gt_tracks[gti].append(norm(gtd, w, h))
             for predi, predd in zip(tracker_ids, tracker_dets):
-                pred_tracks[predi].append(predd)
+                pred_tracks[predi].append(norm(predd, w, h))
             
         gt_right, gt_left = self.count(gt_tracks, self.filter_dist)
         pred_right, pred_left = self.count(pred_tracks, self.filter_dist)
@@ -155,15 +180,18 @@ def evaluate(results_dir, anno_dir, metadata_dir, tracker_name, quiet, iou_thres
         loc_anno_dir = os.path.join(anno_dir, location)
         loc_trackers_dir = os.path.join(results_dir, location)
         dataset_config = get_default_ds_config(loc_anno_dir, loc_trackers_dir, tracker_name)
-        with open(meta_f, "r") as f: js = json.load(f)
-        dataset_config['SEQ_INFO'] = { c['clip_name'] : c['end_frame'] - c['start_frame'] for c in js }
-        dataset_list.append(trackeval.datasets.MotChallenge2DBox(dataset_config))
-        
-        # configure evaluation settings
-        evaluator = trackeval.Evaluator(get_default_eval_config(quiet=quiet))
+        eval_config = get_default_eval_config(quiet=quiet)
         metrics_config = get_default_metrics_config()
         metrics_config['THRESHOLD'] = iou_thresh
-        metrics_config['PRINT_CONFIG'] = not quiet
+        metrics_config['PRINT_CONFIG'] = False
+        
+        with open(meta_f, "r") as f: 
+            js = json.load(f)
+            dataset_config['SEQ_INFO'] = { c['clip_name'] : c['num_frames'] for c in js }
+            metrics_config['SEQ_DIMS'] = { c['clip_name'] : (c['width'], c['height']) for c in js}
+        
+        dataset_list.append(trackeval.datasets.MotChallenge2DBox(dataset_config))
+        evaluator = trackeval.Evaluator(eval_config)
         metrics_list = []
         for metric in [trackeval.metrics.HOTA, trackeval.metrics.CLEAR, trackeval.metrics.Identity, trackeval.metrics.VACE, nMAE]:
             if metric.get_name() in metrics_config['METRICS']:
