@@ -46,7 +46,13 @@ frames/
             ...
 ```     
 
-The 3-channel frames used by our Baseline++ method can be generated using `TODO`
+The 3-channel frames used by our Baseline++ method can be generated using `convert.py`:
+
+```
+python convert.py --in PATH/TO/frames --out PATH/TO/OUTPUT/DIRECTORY
+```
+
+The directory structure will be maintained.
 
 ### Metadata
 
@@ -91,9 +97,9 @@ annotations/
 
 Following the MOTChallenge format, each `gt.txt` file contains one entry per track per frame. Each line contains 10 values:
 
-```<frame>, <id>, <bb_left>, <bb_top>, <bb_width>, <bb_height>, <conf>, <x>, <y>, <z>```
+```<frame_number>, <track_id>, <bb_left>, <bb_top>, <bb_width>, <bb_height>, <conf>, <x>, <y>, <z>```
 
-The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. All frame numbers, target IDs and bounding boxes are 1-based. Here is an example:
+The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. For ground truth tracks, `conf=-1` as well. All frame numbers, target IDs and bounding boxes are 1-indexed (i.e. the minimum `bb_left` and `bb_top` values are 1, not 0). Here is an example:
 
 ```
 1, 3, 794.27, 247.59, 71.245, 174.88, -1, -1, -1, -1
