@@ -24,7 +24,7 @@ Data can be downloaded from AWS using the following links.
 
 **Annotations [5.1 MB]:** [Link to download](link to download)
 
-- Running `md5sum` on the tar.gz file should produce: `36492ff6fb076ed1922ea7881deb1aa2  fish_counting_annotations.tar.gz`
+- Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
 
 ## Data Format
 
@@ -115,7 +115,11 @@ The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. Fo
 
 ### Prediction Results
 
-We provide output from our Baseline and Baseline++ methods in MOTChallenge format as well. Note that the directory structure for predictions is different from the ground truth annotations. After extracting the `tar.gz`, the directory structure is as follows:
+We provide output from our Baseline and Baseline++ methods in MOTChallenge format as well. 
+
+**Results download link coming soon**
+
+Note that the directory structure for predictions is different from the ground truth annotations. After extracting the `tar.gz`, the directory structure is as follows:
 
 ```
 results/
