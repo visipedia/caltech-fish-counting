@@ -117,7 +117,9 @@ The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. Fo
 
 We provide output from our Baseline and Baseline++ methods in MOTChallenge format as well. 
 
-**Results download link coming soon**
+**ECCV22 Baseline Results [18 MB]:** [Link to download](link to download)
+
+- Running `md5sum` on the tar.gz file should produce: `ef8d517ad45419edce7af2e7dc5016be  fish_counting_results.tar.gz`
 
 Note that the directory structure for predictions is different from the ground truth annotations. After extracting the `tar.gz`, the directory structure is as follows:
 
