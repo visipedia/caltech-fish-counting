@@ -26,6 +26,14 @@ Data can be downloaded from AWS using the following links.
 
 - Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
 
+**Tiny Dataset [2.3 GB]** [Link to download](link to download)
+
+There is, alternatively, a tiny dataset which is a subset of the larger dataset. It includes data from all 6 river locations/subsets (elwha, kenai-channel, kenai-rightbank, kenai-train, kenai-val, nushagak). It has 20 clips (videos) from each river and up to 100 consecutive frames from each clip. Each frame is chosen only if it has a corresponding annotation (in annotations-tiny).
+
+The formatting, etc. of each of the subdirectories and file structure follow the formats listed below.
+
+- Running `md5sum` on the tar.gz file should produce `b7b8c4c7a6544f391ece1e9fd4b821e4-291 tiny_dataset.tar.gz` 
+
 ## Data Format
 
 ### Images
