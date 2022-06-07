@@ -100,6 +100,21 @@ def check_dir_matches ( annotations_list, frames_dirs ):
 
     return af_names == frame_names
 
+def get_min_and_max( frame_files ):
+    min_frame = np.inf
+    max_frame = -1
+    for file in frame_files:
+        frame_num = get_frame_idx ( file )
+        if frame_num < min_frame:
+            min_frame = frame_num
+        if frame_num > max_frame:
+            max_frame = frame_num
+    return min_frame, max_frame
+
+def get_frame_idx(path):
+    return int(os.path.basename(path).replace(".jpg",""))
+
+
 def get_frames_in_directory ( directory, all_copied_annotation_files, max_frames_per_clip ):
     '''
     get a subset of frames in subdirectories within a river's root directory
@@ -117,33 +132,33 @@ def get_frames_in_directory ( directory, all_copied_annotation_files, max_frames
         lines = copied_gt_file.readlines()
         annotated_frame_numbers = set([ int(line.split(',')[0]) for line in lines ])
 
-        # find minimum, maximum frame number
-        min_frame = min ( annotated_frame_numbers )
-        max_frame = max ( annotated_frame_numbers )
-
-        # print ( min_frame )
-        # print ( max_frame )
-
-        if ( max_frame - min_frame >= max_frames_per_clip ):
-            max_frame = min_frame + max_frames_per_clip
-        elif ( max_frame - min_frame < max_frames_per_clip ):
-            max_frame = min_frame + max_frames_per_clip
-        
-        frame_numbers = list ( range ( min_frame, max_frame ) )
-
         # find frames
         # get copied_gt_file directory name
         directory_name = os.path.basename ( os.path.dirname ( copied_gt ) )
         all_frame_files = get_files ( directory, directory_name )
 
+        # find minimum, maximum of all frame numbers
+        min_frame, max_frame = get_min_and_max ( all_frame_files )
+        # find minimum, maximum annotated frame number
+        min_annotated_frame = min ( annotated_frame_numbers )
+        max_annotated_frame = max ( annotated_frame_numbers )
+
+        # allow some of the first few frames to not be annotated, as it is in the larger dataset
+        if ( min_annotated_frame - min_frame > int(max_frames_per_clip/4) ):
+            min_frame = min_annotated_frame - int(max_frames_per_clip/4)
+        max_frame = min_frame + max_frames_per_clip
+        
+        frame_numbers = list ( range ( min_frame, max_frame ) )
+
         # if the frame number matches a frame number that's been annotated, add
         # it to the list of frames
         file_numbers = []
         for frame_file in all_frame_files:
-            frame_file_num = int ( os.path.basename ( frame_file )[0:-4] )
+            frame_file_num = get_frame_idx ( frame_file )
             if frame_file_num in frame_numbers:
                 frames.append ( frame_file )
                 file_numbers.append ( frame_file_num )
+        
         assert len(frame_numbers) == len(file_numbers ), f'The length of the number of frames to copy must = length of number of files. frame_numbers: {len(frame_numbers)}, file_numbers: {len(file_numbers)}'
         assert len(frame_numbers) == max_frames_per_clip, f'We should have been able to get {max_frames_per_clip} frames. Instead, we got {len(frame_numbers)}'
         assert np.allclose ( frame_numbers, file_numbers )
