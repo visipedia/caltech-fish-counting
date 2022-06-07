@@ -1,35 +1,36 @@
-#python file to extract small dataset from huge dataset released with ECCV
+'''
+get_tiny_dataset.py
+@author Suzanne Stathatos
+
+Python script to extract small dataset from huge dataset released with ECCV
+Script defaults to extract up to 50 consecutive frames from 20 video clips of each river 
+in the dataset (note: the number of frames to be extracted should not exceed 200). 
+These parameters can be adjusted through command-line arguments. File paths to existing 
+data and tiny (subsetted) data will need to be provided via parameter arguments.
+
+Example usage:
+python get_tiny_dataset.py --frames_file_path /home/sstathat/Fish/frames/raw \
+                           --frames_tiny_file_path /home/sstathat/Fish/frames-tiny/raw \
+                           --annotation_file_path /home/sstathat/Fish/annotations \
+                           --annotation_tiny_file_path /home/sstathat/Fish/annotations-tiny \
+                           --metadata_file_path /home/sstathat/Fish/metadata \
+                           --metadata_tiny_file_path /home/sstathat/Fish/metadata-tiny \
+                           --tiny_dataset_file_path /home/sstathat/Fish/tiny_dataset (OPTIONAL)
+'''
 import os
 import shutil
 import numpy as np
 import json
-
-#TODO: FILL THESE IN BEFORE RUNNING THE SCRIPT
-
-kFramesRoot = 'path/to/frames/raw'
-kTinyFramesRoot = 'path/to/frames-tiny/raw'
-
-kAnnotationsRoot = 'path/to/annotations'
-kTinyAnnotationsRoot = 'path/to/annotations-tiny'
-
-kMetadataRoot = 'path/to/metadata'
-kTinyMetadataRoot = 'path/to/metadata-tiny'
+import argparse
+import shutil 
 
 kGTFile = 'gt.txt'
-
 kKenaiChannelName = 'kenai-channel'
 kKenaiRightBankName = 'kenai-rightbank'
 kKenaiTrainName = 'kenai-train'
 kKenaiValName = 'kenai-val'
 kNushagakName = 'nushagak'
 kElwhaName = 'elwha'
-
-assert ( os.path.exists ( kFramesRoot ), f"Directory does not exist: {kFramesRoot}")
-assert ( os.path.exists ( kAnnotationsRoot ), f"Directory does not exist: {kAnnotationsRoot}" )
-assert ( os.path.exists ( kMetadataRoot ), f"Directory does not exist: {kMetadataRoot}" )
-
-kDirectoryNumber = 20 # only look at 20 directories (i.e. 20 camera recordings) at a time on a particular river
-kFrameNumber = 100 # maximum number of consecutive frames to get from one clip
 
 DEBUG=0
 
@@ -99,7 +100,7 @@ def check_dir_matches ( annotations_list, frames_dirs ):
 
     return af_names == frame_names
 
-def get_frames_in_directory ( directory, all_copied_annotation_files ):
+def get_frames_in_directory ( directory, all_copied_annotation_files, max_frames_per_clip ):
     '''
     get a subset of frames in subdirectories within a river's root directory
     input: 
@@ -114,7 +115,21 @@ def get_frames_in_directory ( directory, all_copied_annotation_files ):
         # get frame numbers
         copied_gt_file = open ( copied_gt, 'r' );
         lines = copied_gt_file.readlines()
-        frame_numbers = set([ int(line.split(',')[0]) for line in lines ])
+        annotated_frame_numbers = set([ int(line.split(',')[0]) for line in lines ])
+
+        # find minimum, maximum frame number
+        min_frame = min ( annotated_frame_numbers )
+        max_frame = max ( annotated_frame_numbers )
+
+        # print ( min_frame )
+        # print ( max_frame )
+
+        if ( max_frame - min_frame >= max_frames_per_clip ):
+            max_frame = min_frame + max_frames_per_clip
+        elif ( max_frame - min_frame < max_frames_per_clip ):
+            max_frame = min_frame + max_frames_per_clip
+        
+        frame_numbers = list ( range ( min_frame, max_frame ) )
 
         # find frames
         # get copied_gt_file directory name
@@ -123,14 +138,19 @@ def get_frames_in_directory ( directory, all_copied_annotation_files ):
 
         # if the frame number matches a frame number that's been annotated, add
         # it to the list of frames
+        file_numbers = []
         for frame_file in all_frame_files:
             frame_file_num = int ( os.path.basename ( frame_file )[0:-4] )
             if frame_file_num in frame_numbers:
                 frames.append ( frame_file )
+                file_numbers.append ( frame_file_num )
+        assert len(frame_numbers) == len(file_numbers ), f'The length of the number of frames to copy must = length of number of files. frame_numbers: {len(frame_numbers)}, file_numbers: {len(file_numbers)}'
+        assert len(frame_numbers) == max_frames_per_clip, f'We should have been able to get {max_frames_per_clip} frames. Instead, we got {len(frame_numbers)}'
+        assert np.allclose ( frame_numbers, file_numbers )
 
     return frames
 
-def get_annotations_in_directory ( directory ):
+def get_annotations_in_directory ( directory, frame_number, clip_number ):
     '''
     Returns a list of tiny ground truth files. 
     Used to read from tiny ground truth files to select corresponding frames next.
@@ -138,12 +158,12 @@ def get_annotations_in_directory ( directory ):
     tiny_gts = []
     
     annotations_dirs = get_directories ( directory );
-    if len(annotations_dirs) > kDirectoryNumber:
-        # get random kDirectoryNumber of directories from the list. Seed it to guarantee it's always the same
+    if len(annotations_dirs) > clip_number:
+        # get random clip_number of directories from the list. Seed it to guarantee it's always the same
         np.random.seed(2022)
-        random_indices = np.random.permutation ( kDirectoryNumber )
+        random_indices = np.random.permutation ( clip_number )
         annotations_dirs = [ annotations_dirs[i] for i in random_indices ]
-        assert len(annotations_dirs) == kDirectoryNumber
+        assert len(annotations_dirs) == clip_number
     
     for annotation_dir in annotations_dirs:
         copied_annotation_file = os.path.join ( annotation_dir, 'gt_tiny.txt' );
@@ -157,8 +177,8 @@ def get_annotations_in_directory ( directory ):
         seen_lines = set({})
         count = 0;
 
-        # write kFrameNumber distinct frames in tiny gt file
-        while ( len(seen_lines) < kFrameNumber and count < len(lines) ): # done like this because a single frame could have multiple fish
+        # write args.frame_number distinct frames in tiny gt file
+        while ( len(seen_lines) < frame_number and count < len(lines) ): # done like this because a single frame could have multiple fish
             line = lines [ count ]
             frame_num = int ( line.split(',')[0] )
 
@@ -169,11 +189,6 @@ def get_annotations_in_directory ( directory ):
             seen_lines.add ( frame_num )
             count += 1;
         
-        # Useful for debugging
-        if DEBUG:
-            if ( count == len(lines) ):
-                print(f'Did not reach {kFrameNumber} due to too few lines in ground truth file {annotation_file_name}. Instead got {count} frames')
-
         # close files
         annotation_file_gt.close()
         copy_annot_file_write.close()
@@ -191,17 +206,17 @@ def split ( f ):
     filename = os.path.basename ( f )
     return river_name, camera_and_day_name, filename
 
-def copy_frames ( frame_files ):
+def copy_frames ( frame_files, tiny_frames_root ):
     '''
     Copy the frames from the folder containing all frames to the folder only containing 
-    the tiny subset of frames (i.e. from kFramesRoot to kTinyFramesRoot )
+    the tiny subset of frames (i.e. from args.frames_file_path to args.frames_tiny_file_path )
     '''
     assert len ( frame_files ) > 0
 
     for f in frame_files:
         river_name, camera_and_day_name, filename = split( f )
 
-        copied_frame_filename = os.path.join ( kTinyFramesRoot, river_name, camera_and_day_name, filename )
+        copied_frame_filename = os.path.join ( tiny_frames_root, river_name, camera_and_day_name, filename )
 
         # create tiny directories if they don't already exist
         os.makedirs ( os.path.dirname ( copied_frame_filename ), exist_ok=True )
@@ -211,16 +226,16 @@ def copy_frames ( frame_files ):
             print( f'copied frame file: {copied_frame_filename}')
 
 
-def move_copied_ground_truth_files ( gt_files ):
+def move_copied_ground_truth_files ( gt_files, tiny_annotations_root ):
     '''
     Subsets of ground truth files were made and stored in the annotation directory.
-    Now we want to move them to the kTinyAnnotationsRoot directory
+    Now we want to move them to the args.annotation_tiny_file_path directory
     '''
     all_moved_annotation_files = []
     for a in all_copied_annotation_files:
         river_name, camera_and_day_name, filename = split( a )
 
-        tiny_gt_filename = os.path.join ( kTinyAnnotationsRoot, river_name, camera_and_day_name, filename )
+        tiny_gt_filename = os.path.join ( tiny_annotations_root, river_name, camera_and_day_name, filename )
         
         # create tiny directories if they don't already exist
         os.makedirs ( os.path.dirname ( tiny_gt_filename ), exist_ok=True )
@@ -231,7 +246,7 @@ def move_copied_ground_truth_files ( gt_files ):
     
     return all_moved_annotation_files
 
-def make_tiny_metadata ( annotated_files, river_name ):
+def make_tiny_metadata ( annotated_files, river_name, metadata_root, tiny_metadata_root ):
     '''
     extract from the annotated_files the names of the parent directories
     these correspond to the clip_names in the metadata file
@@ -239,11 +254,11 @@ def make_tiny_metadata ( annotated_files, river_name ):
     '''
     clip_names = [ os.path.basename ( os.path.dirname ( f ) ) for f in annotated_files ];
     
-    original_metadata_json = os.path.join ( kMetadataRoot, river_name + '.json' );
-    tiny_metadata_json = os.path.join ( kTinyMetadataRoot, river_name + '.json' );
+    original_metadata_json = os.path.join ( metadata_root, river_name + '.json' );
+    tiny_metadata_json = os.path.join ( tiny_metadata_root, river_name + '.json' );
 
     # create tiny metadata directory if it doesn't already exist
-    os.makedirs ( kTinyMetadataRoot, exist_ok=True )
+    os.makedirs ( tiny_metadata_root, exist_ok=True )
 
     metadata_file = open ( original_metadata_json, "r" )
     tiny_metadata_file = open( tiny_metadata_json, "w");
@@ -264,53 +279,110 @@ def make_tiny_metadata ( annotated_files, river_name ):
     metadata_file.close()
 
 
-def get_corresponding_frames_dir ( river_name ):
-    return os.path.join ( kFramesRoot, river_name );
+def get_corresponding_frames_dir ( river_name, frames_root_path ):
+    return os.path.join ( frames_root_path, river_name );
 
-def clean_environment ( ):
+
+def clean_environment ( args ):
     '''
     remove any currently-existing tiny directories
     '''
-    if os.path.exists ( kTinyAnnotationsRoot ):
-        shutil.rmtree ( kTinyAnnotationsRoot );
-    if os.path.exists ( kTinyFramesRoot ):
-        shutil.rmtree ( os.path.dirname ( kTinyFramesRoot ) );
-    if os.path.exists ( kTinyMetadataRoot ):
-        shutil.rmtree ( kTinyMetadataRoot );
+    if os.path.exists ( args.annotation_tiny_file_path ):
+        shutil.rmtree ( args.annotation_tiny_file_path );
+    if os.path.exists ( args.frames_tiny_file_path ):
+        shutil.rmtree ( os.path.dirname ( args.frames_tiny_file_path ) );
+    if os.path.exists ( args.metadata_tiny_file_path ):
+        shutil.rmtree ( args.metadata_tiny_file_path );
+
+
+def parse_args ():
+    '''
+    Pass existing frames directory, annotations directory, and metadata directory in as arguments. 
+    Also specify where you want the tiny (subsetted) dataset of frames, annotations, and metadata to be
+    '''
+    parser = argparse.ArgumentParser ( "Argument parser separating large fish counting dataset into toy dataset" );
+    parser.add_argument ( '-f', '--frames_file_path', help='the complete path to the raw frame directory, i.e. /path/to/frames/raw')
+    parser.add_argument ( '-t', '--frames_tiny_file_path', help='the complete path to where the tiny subset of frames will go, i.e. /path/to/frames-tiny/raw')
+    parser.add_argument ( '-a', '--annotation_file_path', help='the complete path to the directory of annotations, i.e. /path/to/annotations')
+    parser.add_argument ( '-u', '--annotation_tiny_file_path', help='the complete path to where the tiny subset of annotations will be, i.e. /path/to/annotations-tiny')
+    parser.add_argument ( '-m', '--metadata_file_path', help='the complete path to the directory of metadata, i.e. /path/to/metadata')
+    parser.add_argument ( '-v', '--metadata_tiny_file_path', help='the complete path to where the small subset of metadata will be, i.e. /path/to/metadata-tiny')
+    parser.add_argument ( '-o', '--tiny_dataset_file_path', help='the directory under which all subdirectories (i.e. frames, annotations, metadata) will live, i.e. /path/to/tiny_dataset', default='')
+
+    parser.add_argument ( '-n', '--frame_number', help='the maximum number of consecutive frames to get from one clip', default=50)
+    parser.add_argument ( '-d', '--clip_number', help='the number of unique camera recordings to extract frames from on every river', default=20)
+
+    return parser.parse_args()
+
+def valid_args ( args ):
+    '''
+    Checks that the metadata, frames, and annotations paths provided by the arguments exist and checks that valid
+    numbers are passed in for the number of frames within each subdirectory to copy and the number of clips to copy
+    Returns true is all arguments are valid, false otherwise
+    '''
+    return ( os.path.exists ( args.frames_file_path ) and 
+         os.path.exists ( args.annotation_file_path ) and
+         os.path.exists ( args.metadata_file_path ) and
+         args.frame_number > 0 and args.frame_number < 200 and 
+         args.clip_number > 0 )
+
+
+def move_directories ( args ):
+    '''
+    Move the metadata-tiny, annotations-tiny, and frames-tiny directories to a specified parent directory
+    '''
+    # remove tiny_dataset directory if it already exists
+    if ( os.path.exists (args.tiny_dataset_file_path ) ):
+        shutil.rmtree ( args.tiny_dataset_file_path)
+    
+    to_move = [ args.metadata_tiny_file_path, args.annotation_tiny_file_path, args.frames_tiny_file_path ]
+    for tiny_dir in to_move:
+        name = os.path.basename ( tiny_dir )
+        destination = os.path.join ( args.tiny_dataset_file_path, name )
+        dest = shutil.move ( tiny_dir, destination )
+        if ( dest != destination ):
+            print ( f'Something went wrong moving {tiny_dir} to {destination}. Instead, was moved to {dest}') 
 
 if __name__ == '__main__':
-    clean_environment ();
+    args = parse_args()
+
+    assert valid_args ( args ),  "One of the arguments provided was invalid"
+
+    clean_environment ( args );
 
     if not DEBUG:
         print ( 'Getting annotations...')
-        rivers = get_directories ( kAnnotationsRoot )
+        rivers = get_directories ( args.annotation_file_path )
         for river in rivers:
             print ( f'River: {os.path.basename(river)}')
             # get subdirectories in annotations that match the subdirectories of the frames we have annotated
-            all_copied_annotation_files = get_annotations_in_directory ( river )
+            all_copied_annotation_files = get_annotations_in_directory ( river, args.frame_number, args.clip_number )
 
             # move copies of smaller ground-truth files to tiny directories
-            all_moved_annotation_files = move_copied_ground_truth_files ( all_copied_annotation_files );
+            all_moved_annotation_files = move_copied_ground_truth_files ( all_copied_annotation_files, args.annotation_tiny_file_path );
 
             # find corresponding river in frames directory
             print ( 'Getting corresponding frames...')
-            frames_river_path = get_corresponding_frames_dir ( os.path.basename ( river ) );
-            all_frames_to_copy = get_frames_in_directory ( frames_river_path, all_moved_annotation_files );
+            frames_river_path = get_corresponding_frames_dir ( os.path.basename ( river ), args.frames_file_path );
+            all_frames_to_copy = get_frames_in_directory ( frames_river_path, all_moved_annotation_files, args.frame_number );
 
             # copy frames to tiny directories
-            copy_frames ( all_frames_to_copy );
+            copy_frames ( all_frames_to_copy, args.frames_tiny_file_path );
 
             # make tiny metadata file with only the directories (aka) clip names that we have
-            make_tiny_metadata ( all_moved_annotation_files, os.path.basename(river) )
+            make_tiny_metadata ( all_moved_annotation_files, os.path.basename(river), args.metadata_file_path, args.metadata_tiny_file_path )
 
     else:
         print ( f'DEBUG: getting frames and annotations from {kElwhaName} river')
         # Useful to debug just one river and a small number of frames
-        all_copied_annotation_files = get_annotations_in_directory ( os.path.join ( kAnnotationsRoot, kElwhaName ) );
-        all_moved_annotation_files = move_copied_ground_truth_files ( all_copied_annotation_files );
+        all_copied_annotation_files = get_annotations_in_directory ( os.path.join ( args.annotation_file_path, kElwhaName ), args.frame_number, args.clip_number );
+        all_moved_annotation_files = move_copied_ground_truth_files ( all_copied_annotation_files, args.annotation_tiny_file_path );
 
-        all_frames_to_copy = get_frames_in_directory ( os.path.join ( kFramesRoot, kElwhaName ), all_moved_annotation_files );
-        copy_frames ( all_frames_to_copy );
+        all_frames_to_copy = get_frames_in_directory ( os.path.join ( args.frames_file_path, kElwhaName ), all_moved_annotation_files, args.frame_number );
+        copy_frames ( all_frames_to_copy, args.frames_tiny_file_path );
 
-        make_tiny_metadata ( all_moved_annotation_files, kElwhaName )
+        make_tiny_metadata ( all_moved_annotation_files, kElwhaName, args.metadata_file_path, args.metadata_tiny_file_path )
 
+    # if this option is specified, move all the subdirectories into here
+    if ( args.tiny_dataset_file_path != '' ):
+        move_directories ( args )
