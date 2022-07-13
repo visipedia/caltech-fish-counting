@@ -235,8 +235,11 @@ def copy_frames ( frame_files, tiny_frames_root ):
 
         # create tiny directories if they don't already exist
         os.makedirs ( os.path.dirname ( copied_frame_filename ), exist_ok=True )
-
-        shutil.copyfile ( f, copied_frame_filename )
+        try:
+            shutil.copyfile ( os.path.abspath (f), os.path.abspath ( copied_frame_filename ) )
+        except:
+            print ( "There was an error while copying the file")
+        
         if DEBUG:
             print( f'copied frame file: {copied_frame_filename}')
 
@@ -354,9 +357,9 @@ def move_directories ( args ):
     for tiny_dir in to_move:
         name = os.path.basename ( tiny_dir )
         destination = os.path.join ( args.tiny_dataset_file_path, name )
-        dest = shutil.move ( tiny_dir, destination )
-        if ( dest != destination ):
-            print ( f'Something went wrong moving {tiny_dir} to {destination}. Instead, was moved to {dest}') 
+        dest = shutil.move ( os.path.abspath(tiny_dir), os.path.abspath(destination) )
+        if ( os.path.abspath(dest) != os.path.abspath(destination) ):
+            print ( f'Something went wrong moving {os.path.abspath(tiny_dir)} to {os.path.abspath(destination)}. Instead, was moved to {dest}') 
 
 if __name__ == '__main__':
     args = parse_args()
@@ -364,6 +367,12 @@ if __name__ == '__main__':
     assert valid_args ( args ),  "One of the arguments provided was invalid"
 
     clean_environment ( args );
+    if ( args.frames_tiny_file_path[-1] != '/' ):
+        args.frames_tiny_file_path += '/'
+
+    print (f'tiny file path {os.path.abspath(args.frames_tiny_file_path)}')
+
+    os.makedirs ( os.path.abspath(args.frames_tiny_file_path), exist_ok=True )
 
     if not DEBUG:
         print ( 'Getting annotations...')
