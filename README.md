@@ -16,6 +16,8 @@ Data can be downloaded from CaltechDATA using the following links.
 
 - Running `md5sum` on the tar.gz file should produce: `176648e618fc5013db972aa7ded01517  fish_counting_frames.tar.gz`
 
+- We also make available a [Tiny Dataset [1.44 GB]](https://data.caltech.edu/tindfiles/serve/4a699fbc-c4cc-48e7-9ae7-f1a415121126/) which is a subset of the larger dataset, for exploring the dataset without downloading the entire thing. It includes data from all 6 river locations/subsets (elwha, kenai-channel, kenai-rightbank, kenai-train, kenai-val, nushagak). It has 20 clips (videos) from each river and up to 50 consecutive frames from each clip. The formatting, etc. of each of the subdirectories and file structure follow the formats listed below. Running `md5sum` on the tar.gz file should produce `6ae6062d50a90d4b084ebe476a392c0e tiny_dataset.tar.gz`
+
 [Metadata [54 KB]](https://data.caltech.edu/tindfiles/serve/a69cdc3a-7082-403c-a656-03ab7aaa6b17/)
 
 - Running `md5sum` on the tar.gz file should produce: `152286bd6f25f965aadf41e8a0c44140  fish_counting_metadata.tar.gz`
@@ -23,14 +25,6 @@ Data can be downloaded from CaltechDATA using the following links.
 [Annotations [5.1 MB]](https://data.caltech.edu/tindfiles/serve/ec0efc6f-2b37-4535-b05e-c85f3a5f950d/)
 
 - Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
-
-[Tiny Dataset [1.44 GB]](https://data.caltech.edu/tindfiles/serve/4a699fbc-c4cc-48e7-9ae7-f1a415121126/)
-
-There is, alternatively, a tiny dataset which is a subset of the larger dataset. It includes data from all 6 river locations/subsets (elwha, kenai-channel, kenai-rightbank, kenai-train, kenai-val, nushagak). It has 20 clips (videos) from each river and up to 50 consecutive frames from each clip.
-
-The formatting, etc. of each of the subdirectories and file structure follow the formats listed below.
-
-- Running `md5sum` on the tar.gz file should produce `6ae6062d50a90d4b084ebe476a392c0e tiny_dataset.tar.gz` 
 
 ## Data Format
 
