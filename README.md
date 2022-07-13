@@ -1,9 +1,7 @@
 <!-- <img src="assets/examples.gif" width=100%> -->
 ![Example frames from the Fish Counting dataset indicating various challenges.](assets/exframes.png)
 
-# Caltech Fish Counting Dataset
-
-Resources for the Caltech Fish Counting Dataset, as described in [link to paper](link to paper)
+# The Caltech Fish Counting Dataset
 
 This repository includes:
 - [x] Links to download the dataset and annotations
@@ -12,17 +10,17 @@ This repository includes:
 
 ## Data Download
 
-Data can be downloaded from AWS using the following links.
+Data can be downloaded from CaltechDATA using the following links.
 
-**Training, validation, and testing images [123 GB]:** [Link to download](link to download)
+[Training, validation, and testing images [123 GB]](https://data.caltech.edu/tindfiles/serve/ff340630-a2bb-418b-9b54-91809c7af1cb/)
 
 - Running `md5sum` on the tar.gz file should produce: `176648e618fc5013db972aa7ded01517  fish_counting_frames.tar.gz`
 
-**Metadata [54 KB]:** [Link to download](link to download)
+[Metadata [54 KB]](https://data.caltech.edu/tindfiles/serve/a69cdc3a-7082-403c-a656-03ab7aaa6b17/)
 
 - Running `md5sum` on the tar.gz file should produce: `152286bd6f25f965aadf41e8a0c44140  fish_counting_metadata.tar.gz`
 
-**Annotations [5.1 MB]:** [Link to download](link to download)
+[Annotations [5.1 MB]](https://data.caltech.edu/tindfiles/serve/ec0efc6f-2b37-4535-b05e-c85f3a5f950d/)
 
 - Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
 
@@ -125,7 +123,7 @@ The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. Fo
 
 We provide output from our Baseline and Baseline++ methods in MOTChallenge format as well. 
 
-**ECCV22 Baseline Results [18 MB]:** [Link to download](link to download)
+[ECCV22 Baseline Results [18 MB]](https://data.caltech.edu/tindfiles/serve/c7312167-a622-47d2-a5ee-e9fe01cb77bf/)
 
 - Running `md5sum` on the tar.gz file should produce: `ef8d517ad45419edce7af2e7dc5016be  fish_counting_results.tar.gz`
 
@@ -171,7 +169,7 @@ git submodule update
 
 ### Evaluation
 
-We provide evaluation code using the [TrackEval](https://github.com/JonathonLuiten/TrackEval) codebase. In addition to the [CLEAR](https://link.springer.com/article/10.1155/2008/246309) and [ID](https://arxiv.org/abs/1609.01775) tracking metrics, we extend the TrackEval codebase with a custom metric `nMAE` as described in the paper:
+We provide evaluation code using the [TrackEval](https://github.com/JonathonLuiten/TrackEval) codebase. In addition to the [CLEAR](https://link.springer.com/article/10.1155/2008/246309), [ID](https://arxiv.org/abs/1609.01775), and [HOTA](https://arxiv.org/abs/2009.07736) tracking metrics, we extend the TrackEval codebase with a custom metric `nMAE` as described in the paper:
 
 <img src="https://render.githubusercontent.com/render/math?math=nMAE = \frac{\frac{1}{N}\sum_{i=1}^{N} E_i}{\frac{1}{N}\sum_{i=1}^{N} \hat{z}_i} = \frac{\sum_{i=1}^{N} E_i}{\sum_{i=1}^{N} \hat{z}_i}">, 
 
@@ -194,4 +192,22 @@ python evaluate.py --results_dir PATH/TO/results --anno_dir PATH/TO/annotations 
 
 ## Reference
 
-```TODO: Bibtex for citing us```
+#### The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting
+
+[Justin Kay](https://justinkay.github.io), [Peter Kulits](https://kulits.github.io), [Suzanne Stathatos](https://scholar.google.com/citations?user=JAAaAIcAAAAJ), [Siqi Deng](https://www.amazon.science/author/siqi-deng), [Erik Young](https://home.tu.org/users/erikyoung), [Sara Beery](https://beerys.github.io/), [Grant Van Horn](https://gvanhorn38.github.io/), and [Pietro Perona](https://scholar.google.com/citations?user=j29kMCwAAAAJ)
+
+We present the Caltech Fish Counting Dataset (CFC), a
+large-scale dataset for detecting, tracking, and counting fish in sonar
+videos. We identify sonar videos as a rich source of data for advancing low signal-to-noise computer vision applications and tackling domain generalization for multiple-object tracking (MOT) and counting.
+In comparison to existing MOT and counting datasets, which are largely
+restricted to videos of people and vehicles in cities, CFC is sourced from
+a natural-world domain where targets are not easily resolvable and appearance features cannot be easily leveraged for target re-identification.
+With over half a million annotations in over 1,500 videos sourced from
+seven different sonar cameras, CFC allows researchers to train MOT and
+counting algorithms and evaluate generalization performance at unseen
+test locations. We perform extensive baseline experiments and identify
+key challenges and opportunities for advancing the state of the art in
+generalization in MOT and counting.
+
+
+```TODO: Bibtex```

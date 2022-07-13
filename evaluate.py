@@ -152,7 +152,7 @@ def get_default_eval_config(quiet=False):
     return eval_config
 
 def get_default_metrics_config():
-    return {'METRICS': ['CLEAR', 'Identity', 'nMAE'], 'THRESHOLD': 0.5}
+    return {'METRICS': ['CLEAR', 'Identity', 'HOTA', 'nMAE'], 'THRESHOLD': 0.5}
 
 def get_meta(metadata_dir='metadata'):
     """
