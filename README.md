@@ -24,7 +24,7 @@ Data can be downloaded from CaltechDATA using the following links.
 
 - Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
 
-**Tiny Dataset [1.44 GB]** [Link to download](link to download)
+[Tiny Dataset [1.44 GB]](https://data.caltech.edu/tindfiles/serve/4a699fbc-c4cc-48e7-9ae7-f1a415121126/)
 
 There is, alternatively, a tiny dataset which is a subset of the larger dataset. It includes data from all 6 river locations/subsets (elwha, kenai-channel, kenai-rightbank, kenai-train, kenai-val, nushagak). It has 20 clips (videos) from each river and up to 50 consecutive frames from each clip.
 
