@@ -203,5 +203,13 @@ test locations. We perform extensive baseline experiments and identify
 key challenges and opportunities for advancing the state of the art in
 generalization in MOT and counting.
 
+If you find our work useful in your research please consider citing our paper:
 
-```TODO: Bibtex```
+```
+@inproceedings{cfc2022eccv,
+    author    = {Kay, Justin and Kulits, Peter and and Stathatos, Suzanne and Deng, Siqi and Young, Erik and Beery, Sara and Van Horn, Grant and Perona, Pietro},
+    title     = {The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting},
+    booktitle = {European Conference on Computer Vision (ECCV)},
+    year      = {2022}
+}
+```
