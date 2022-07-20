@@ -3,7 +3,7 @@
 
 # The Caltech Fish Counting Dataset
 
-This repository includes:
+This repository includes resources for [The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting](https://arxiv.org/abs/2207.09295) (ECCV 2022):
 - [x] Links to download the dataset and annotations
 - [x] Evaluation code to reproduce our results and evaluate new algorithms
 - [x] A script to convert raw sonar frames into the enhanced format used by the Baseline++ method in the paper
@@ -186,7 +186,7 @@ python evaluate.py --results_dir PATH/TO/results --anno_dir PATH/TO/annotations 
 
 ## Reference
 
-#### The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting
+#### [The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting](https://arxiv.org/abs/2207.09295)
 
 [Justin Kay](https://justinkay.github.io), [Peter Kulits](https://kulits.github.io), [Suzanne Stathatos](https://scholar.google.com/citations?user=JAAaAIcAAAAJ), [Siqi Deng](https://www.amazon.science/author/siqi-deng), [Erik Young](https://home.tu.org/users/erikyoung), [Sara Beery](https://beerys.github.io/), [Grant Van Horn](https://gvanhorn38.github.io/), and [Pietro Perona](https://scholar.google.com/citations?user=j29kMCwAAAAJ)
 
