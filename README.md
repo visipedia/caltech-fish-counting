@@ -188,7 +188,7 @@ python evaluate.py --results_dir PATH/TO/results --anno_dir PATH/TO/annotations 
 
 #### [The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting](https://arxiv.org/abs/2207.09295)
 
-[Justin Kay](https://justinkay.github.io), [Peter Kulits](https://kulits.github.io), [Suzanne Stathatos](https://scholar.google.com/citations?user=JAAaAIcAAAAJ), [Siqi Deng](https://www.amazon.science/author/siqi-deng), [Erik Young](https://home.tu.org/users/erikyoung), [Sara Beery](https://beerys.github.io/), [Grant Van Horn](https://gvanhorn38.github.io/), and [Pietro Perona](https://scholar.google.com/citations?user=j29kMCwAAAAJ)
+[Justin Kay](https://justinkay.github.io), [Peter Kulits](https://kulits.github.io), [Suzanne Stathatos](https://suzanne-stathatos.github.io/), [Siqi Deng](https://www.amazon.science/author/siqi-deng), [Erik Young](https://home.tu.org/users/erikyoung), [Sara Beery](https://beerys.github.io/), [Grant Van Horn](https://gvanhorn38.github.io/), and [Pietro Perona](https://scholar.google.com/citations?user=j29kMCwAAAAJ)
 
 We present the Caltech Fish Counting Dataset (CFC), a
 large-scale dataset for detecting, tracking, and counting fish in sonar
@@ -207,7 +207,7 @@ If you find our work useful in your research please consider citing our paper:
 
 ```
 @inproceedings{cfc2022eccv,
-    author    = {Kay, Justin and Kulits, Peter and and Stathatos, Suzanne and Deng, Siqi and Young, Erik and Beery, Sara and Van Horn, Grant and Perona, Pietro},
+    author    = {Kay, Justin and Kulits, Peter and Stathatos, Suzanne and Deng, Siqi and Young, Erik and Beery, Sara and Van Horn, Grant and Perona, Pietro},
     title     = {The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting},
     booktitle = {European Conference on Computer Vision (ECCV)},
     year      = {2022}
