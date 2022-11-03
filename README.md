@@ -12,17 +12,17 @@ This repository includes resources for [The Caltech Fish Counting Dataset: A Ben
 
 Data can be downloaded from CaltechDATA using the following links.
 
-[Training, validation, and testing images [123 GB]](https://data.caltech.edu/tindfiles/serve/ff340630-a2bb-418b-9b54-91809c7af1cb/)
+[Training, validation, and testing images [123 GB]](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_frames.tar.gz?download=1)
 
 - Running `md5sum` on the tar.gz file should produce: `176648e618fc5013db972aa7ded01517  fish_counting_frames.tar.gz`
 
-- We also make available a [Tiny Dataset [1.44 GB]](https://data.caltech.edu/tindfiles/serve/4a699fbc-c4cc-48e7-9ae7-f1a415121126/) which is a subset of the larger dataset, for exploring the dataset without downloading the entire thing. It includes data from all 6 river locations/subsets (elwha, kenai-channel, kenai-rightbank, kenai-train, kenai-val, nushagak). It has 20 clips (videos) from each river and up to 50 consecutive frames from each clip. The formatting, etc. of each of the subdirectories and file structure follow the formats listed below. Running `md5sum` on the tar.gz file should produce `6ae6062d50a90d4b084ebe476a392c0e tiny_dataset.tar.gz`
+- We also make available a [Tiny Dataset [1.44 GB]](https://data.caltech.edu/records/1y23m-j8r69/files/tiny_dataset.tar.gz?download=1) which is a subset of the larger dataset, for exploring the dataset without downloading the entire thing. It includes data from all 6 river locations/subsets (elwha, kenai-channel, kenai-rightbank, kenai-train, kenai-val, nushagak). It has 20 clips (videos) from each river and up to 50 consecutive frames from each clip. The formatting, etc. of each of the subdirectories and file structure follow the formats listed below. Running `md5sum` on the tar.gz file should produce `6ae6062d50a90d4b084ebe476a392c0e tiny_dataset.tar.gz`
 
-[Metadata [54 KB]](https://data.caltech.edu/tindfiles/serve/a69cdc3a-7082-403c-a656-03ab7aaa6b17/)
+[Metadata [54 KB]](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_metadata.tar.gz?download=1)
 
 - Running `md5sum` on the tar.gz file should produce: `152286bd6f25f965aadf41e8a0c44140  fish_counting_metadata.tar.gz`
 
-[Annotations [5.1 MB]](https://data.caltech.edu/tindfiles/serve/ec0efc6f-2b37-4535-b05e-c85f3a5f950d/)
+[Annotations [5.1 MB]](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_annotations.tar.gz?download=1)
 
 - Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
 
@@ -117,7 +117,7 @@ The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. Fo
 
 We provide output from our Baseline and Baseline++ methods in MOTChallenge format as well. 
 
-[ECCV22 Baseline Results [18 MB]](https://data.caltech.edu/tindfiles/serve/c7312167-a622-47d2-a5ee-e9fe01cb77bf/)
+[ECCV22 Baseline Results [18 MB]](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_results.tar.gz?download=1)
 
 - Running `md5sum` on the tar.gz file should produce: `ef8d517ad45419edce7af2e7dc5016be  fish_counting_results.tar.gz`
 
