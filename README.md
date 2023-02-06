@@ -26,6 +26,10 @@ Data can be downloaded from CaltechDATA using the following links.
 
 - Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
 
+[Coco-style Annotations [13 MB]](https://data.caltech.edu/records/1y23m-j8r69/files/coco_formatted_annotations.tar.gz?download=1)
+
+- Running `md5sum` on the tar.gz file should produce: `134b2e7e04b52bfc637e33418ac3df5b coco_formatted_annotations.tar.gz`
+
 ## Data Format
 
 ### Images
@@ -80,8 +84,9 @@ Clip-level metadata is provided for each video clip in the dataset. One JSON fil
 
 ### Annotations
 
-We provide annotations in the MOTChallenge format and use the default directory structure as described [here](https://github.com/JonathonLuiten/TrackEval/tree/master/docs/MOTChallenge-Official#data-format). After extracting the `tar.gz`, the directory structure is as follows:
+We provide annotations in COCO format as well as  MOTChallenge format. For both, we use the default directory structure as described [here](https://github.com/JonathonLuiten/TrackEval/tree/master/docs/MOTChallenge-Official#data-format). After extracting the `tar.gz`, the directory structure is as follows:
 
+#### MOTChallenge
 ```
 annotations/
     kenai-train/
@@ -112,6 +117,59 @@ The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. Fo
 1, 8, 875.49, 399.98, 95.303, 233.93, -1, -1, -1, -1
 ```
 
+#### COCO
+``
+coco_formatted_annotations/
+    kenai-train/
+        coco.json
+    kenai-val/
+        coco.json
+    kenai-rightbank/
+        ...
+    kenai-channel/
+        ...
+    nushagak/
+        ...
+    elwha/
+        ...
+```
+
+Where each `coco.json` file includes all of the regular information regarding image labels and annotation labels, with the addition that each image_label also has a `dir_name` corresponding to the directory name of the video sequence in the training set.
+
+```
+{
+    "images": [
+        {
+            "dir_name": "2018-06-01-JD152_LeftFar_Stratum2_Set1_LO_2018-06-01_191003_0_280",
+            "file_name": "0.jpg",
+            "height": 1915,
+            "width": 781,
+            "id": 0
+    ...
+        "categories": [
+        {
+            "supercategory": "",
+            "id": 1,
+            "name": "fish"
+        }
+    ],
+    "annotations": [
+        {
+            "id": 1,
+            "image_id": 17,
+            "bbox": [
+                241.0,
+                1851.0,
+                15.0,
+                10.0
+            ],
+            "area": 150,
+            "iscrowd": 0,
+            "category_id": 1
+        },
+   ...
+}
+```
 
 ### Prediction Results
 
