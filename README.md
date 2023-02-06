@@ -118,7 +118,7 @@ The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. Fo
 ```
 
 #### COCO
-``
+```
 coco_formatted_annotations/
     kenai-train/
         coco.json
