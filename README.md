@@ -26,9 +26,9 @@ Data can be downloaded from CaltechDATA using the following links.
 
 - Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
 
-[Coco-style Annotations [13 MB]](https://data.caltech.edu/records/1y23m-j8r69/files/coco_formatted_annotations.tar.gz?download=1)
+[Coco-style Annotations [11 MB]](https://data.caltech.edu/records/1y23m-j8r69/files/coco_formatted_annotations.tar.gz?download=1)
 
-- Running `md5sum` on the tar.gz file should produce: `134b2e7e04b52bfc637e33418ac3df5b coco_formatted_annotations.tar.gz`
+- Running `md5sum` on the tar.gz file should produce: `92694f9df235cf1e089f65e06faa9c82 coco_formatted_annotations.tar.gz`
 
 ## Data Format
 
