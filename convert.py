@@ -82,7 +82,7 @@ def convert(in_dir, out_dir):
                 seq_out_dir = os.path.join(out_dir, location, seq)
                 os.makedirs(seq_out_dir, exist_ok=True)
 
-                background_subtract_frames (seq_out_dir, frames)
+                background_subtract_frames (frames, seq_out_dir)
     else:
         frames = sorted(glob.glob(in_dir + "/*.jpg"), key=get_frame_idx)
         os.makedirs(out_dir, exist_ok=True)
