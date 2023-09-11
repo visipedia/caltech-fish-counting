@@ -9,7 +9,7 @@ Input:
 
 
 Example command: 
-python label_maker.py --in_dir ..frames/coco_style_annotations --out_dir ../frames/labels
+python coco2yolo.py --in_dir ..frames/coco_style_annotations --out_dir ../frames/labels
 '''
 
 import argparse
@@ -36,6 +36,8 @@ def extract_labels (data, loc_out_dir):
         bb_h = bb[3]/h
         x_center = x_min + bb_w/2
         y_center = y_min + bb_h/2
+
+        # Assert bbox is normalized between [0,1]
         if (x_min + bb_w > 1 or y_min + bb_h > 1 ):
             print("")
             print("Error")
@@ -61,12 +63,6 @@ def extract_labels (data, loc_out_dir):
         
         file_nbr = int(image['file_name'].replace(".jpg", "")) - 1
         file_name = str(file_nbr) + ".txt"
- 
-
-        if dir_name == "RB_Nusagak_Sonar_Files_2018_RB_2018-07-12_121000_4500_4800" and file_name == "0.txt":
-            print(image)
-        if dir_name == "RB_Nusagak_Sonar_Files_2018_RB_2018-07-12_121000_4500_4800" and file_name == "152.txt":
-            print(image)
 
         file_path = os.path.join(seq_out_dir, file_name)
         f = open(file_path, "w")
@@ -75,7 +71,6 @@ def extract_labels (data, loc_out_dir):
 
 def file_split(in_dir, out_dir):
     for location in os.listdir(in_dir):
-        if location != "nushagak": continue
         loc_dir = os.path.join(in_dir, location)
         loc_out_dir = os.path.join(out_dir, location)
         if location.startswith(".") or not os.path.isdir(loc_dir): continue
