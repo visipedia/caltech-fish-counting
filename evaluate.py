@@ -170,6 +170,7 @@ def get_meta(metadata_dir='metadata'):
 def evaluate(results_dir, anno_dir, metadata_dir, tracker_name, quiet, iou_thresh=0.5):
     meta = get_meta(metadata_dir)
     
+    results = {}
     for meta_f in meta:
         if 'train' in meta_f: continue
         location = os.path.basename(meta_f).replace(".json","")
@@ -199,6 +200,9 @@ def evaluate(results_dir, anno_dir, metadata_dir, tracker_name, quiet, iou_thres
                 
         # run evaluation
         output_res, output_msg = evaluator.evaluate(dataset_list, metrics_list)
+        results[meta_f] = output_res
+        
+    return output_res
     
 def eval_argument_parser():
     parser = argparse.ArgumentParser()
