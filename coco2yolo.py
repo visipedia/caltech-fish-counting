@@ -9,7 +9,7 @@ Input:
 
 
 Example command: 
-python coco2yolo.py --in_dir ..frames/coco_style_annotations --out_dir ../frames/labels
+python coco2yolo.py --in_dir ../coco_style_annotations --out_dir ../frames/labels
 '''
 
 import argparse
@@ -57,14 +57,18 @@ def extract_labels (data, loc_out_dir):
         # get output directory
         dir_name = image['dir_name']
 
+        if not os.path.isdir(loc_out_dir):
+            os.makedirs(loc_out_dir, exist_ok=True)
+
         seq_out_dir = os.path.join(loc_out_dir, dir_name)
-        if not os.path.isdir(seq_out_dir):
-            os.makedirs(seq_out_dir, exist_ok=True)
+        #if not os.path.isdir(seq_out_dir):
+        #    os.makedirs(seq_out_dir, exist_ok=True)
         
         file_nbr = int(image['file_name'].replace(".jpg", "")) - 1
         file_name = str(file_nbr) + ".txt"
 
         file_path = os.path.join(seq_out_dir, file_name)
+        file_path = f"{seq_out_dir}_{file_name}"
         f = open(file_path, "w")
         f.write(annotation)
         f.close()
@@ -84,7 +88,7 @@ def file_split(in_dir, out_dir):
 
 def argument_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--in_dir", default="../frames/coco_formatted_annotations/", help="Location of Coco annotation directory.")
+    parser.add_argument("--in_dir", default="../coco_formatted_annotations/", help="Location of Coco annotation directory.")
     parser.add_argument("--out_dir", default="../frames/labels/", help="Output location for Yolov5 labels.")
     return parser
 
