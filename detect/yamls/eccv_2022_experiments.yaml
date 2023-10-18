@@ -1,0 +1,11 @@
+path: /path/to/eccv_2022/yolo_data
+train: /path/to/eccv_2022/yolo_data/images/kenai-train
+val: /path/to/eccv_2022/yolo_data/images/kenai-val
+elwha: /path/to/eccv_2022/yolo_data/images/elwha
+nushagak: /path/to/eccv_2022/yolo_data/images/nushagak
+channel: /path/to/eccv_2022/yolo_data/images/channel
+rightbank: /path/to/eccv_2022/yolo_data/images/rightbank
+test: /path/to/eccv_2022/yolo_data/images/test
+
+nc: 1  # number of classes
+names: ['fish']
