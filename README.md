@@ -29,6 +29,7 @@ Data can be downloaded from CaltechDATA using the following links.
 [Coco-style Annotations [11 MB]](https://data.caltech.edu/records/1y23m-j8r69/files/coco_formatted_annotations.tar.gz?download=1)
 
 - Running `md5sum` on the tar.gz file should produce: `92694f9df235cf1e089f65e06faa9c82 coco_formatted_annotations.tar.gz`
+- Note that these do not currently have track IDs
 
 ## Data Format
 
