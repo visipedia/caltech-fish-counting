@@ -2,7 +2,9 @@
 convert.py
 @author justinkay
 
-Converts a clip (sequence of frames) to its background-subtracted version.
+Converts a clip (sequence of frames) to its 3-channel Baseline++ version.
+The three channels will be: (1) The raw image, (2) A background-subtracted version, (3) Frame-to-frame difference
+
 Input: 
     - in_dir: input directory of where the frames are (default: current_working_directory/frames/raw/ )
     - out_dir: output directory of where you want the background-subtracted frames to live (default: current_working_directory/frames/3-channel/ )
@@ -24,7 +26,7 @@ from tqdm import tqdm
 def get_frame_idx(path):
     return int(os.path.basename(path).replace(".jpg",""))
 
-def has_subdirectories ( path ):
+def has_subdirectories(path):
     '''
     Returns true if the specified path has subdirectories, 
     and false otherwise
@@ -35,7 +37,7 @@ def has_subdirectories ( path ):
             return True
     return False
 
-def background_subtract_frames (frames, seq_out_dir):    
+def background_subtract_frames(frames, seq_out_dir):    
     frame_data = []
     for frame in frames:
         frame = cv2.imread(frame, cv2.IMREAD_GRAYSCALE)#[...,0] # grayscale; take just one channel
