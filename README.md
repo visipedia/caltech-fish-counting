@@ -1,5 +1,5 @@
 <!-- <img src="assets/examples.gif" width=100%> -->
-![Example frames from the Fish Counting dataset indicating various challenges.](assets/exframes.png)
+![Example frames from the Fish Counting dataset indicating various challenges.](CFC/assets/exframes.png)
 
 # The Caltech Fish Counting Dataset
 
