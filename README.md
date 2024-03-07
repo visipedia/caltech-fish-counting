@@ -4,7 +4,7 @@
 
 This repository includes resources for the CFC – Domain Adaptive Object Detection (CFC-DAOD) dataset introduced in [Align and Distill: A Unifying and Extending Domain Adaptive Object Detection]() (2024, under review). It is an extension of the CFC Dataset (ECCV 2022) that includes additional data for unsupervised domain adaptation.
 
-Below we provide download links for all data and annotations. Please see the [Align and Distill (ALDI)](bit.ly/48KVmfR) codebase to train DAOD models on CFC-DAOD.
+Below we provide download links for all data and annotations. Please see the [Align and Distill (ALDI)](https://bit.ly/48KVmfR) codebase to train DAOD models on CFC-DAOD.
 
 ## Data 
 
@@ -27,28 +27,28 @@ Data can be downloaded using the following links.
 
 **Images:**
 
-[CFC Kenai (source) train images (16 GB)](bit.ly/3wKOCBj)
+[CFC Kenai (source) train images (16 GB)](https://bit.ly/3wKOCBj)
 
 - Running `md5sum cfc_train.zip` should return `935b4cd5ae5812035051f24e6707ee17  cfc_train.zip`
 
-[CFC Kenai (source) val images (4.1 GB)](bit.ly/3v7jz1R)
+[CFC Kenai (source) val images (4.1 GB)](https://bit.ly/3v7jz1R)
 
 - Running `md5sum cfc_val.zip` should return `e662ae8318621d1a636f0befadddaf48  cfc_val.zip`
 
-[CFC Channel (target) train images (2.9 GB)](bit.ly/3TlXqGt)
+[CFC Channel (target) train images (2.9 GB)](https://bit.ly/3TlXqGt)
 
 - Running `md5sum cfc_channel_train.zip` should return `d17e0485674327df3d7611a5d6b999b1  cfc_channel_train.zip`
 
-[CFC Channel (target) test images (2.8 GB)](bit.ly/3uQr8u1)
+[CFC Channel (target) test images (2.8 GB)](https://bit.ly/3uQr8u1)
 
 - Running `md5sum cfc_channel_test.zip` should return `9c15b9c9dc6784cce9dba21e81cb514a  cfc_channel_test.zip`
 
 **Labels:**
 
-[CFC Kenai (source) train labels](bit.ly/48EMZ5b)
+[CFC Kenai (source) train labels](https://bit.ly/48EMZ5b)
 
-[CFC Kenai (source) val labels](bit.ly/3V2v8Cc)
+[CFC Kenai (source) val labels](https://bit.ly/3V2v8Cc)
 
-[CFC Channel (target) train labels](bit.ly/4c8jkVd)
+[CFC Channel (target) train labels](https://bit.ly/4c8jkVd)
 
-[CFC Channel (target) test labels](bit.ly/49GF74E)
+[CFC Channel (target) test labels](https://bit.ly/49GF74E)
