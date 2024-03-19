@@ -2,7 +2,7 @@
 
 # Caltech Fish Counting – Domain Adaptive Object Detection
 
-This repository includes resources for the Caltech Fish Counting – Domain Adaptive Object Detection (CFC-DAOD) dataset introduced in [Align and Distill: A Unified Framework for Domain Adaptive Object Detection]() (2024, preprint coming soon). It is an extension of the [Caltech Fish Counting Dataset](../CFC/) (ECCV 2022) that includes additional data for unsupervised domain adaptation.
+This repository includes resources for the Caltech Fish Counting – Domain Adaptive Object Detection (CFC-DAOD) dataset introduced in [Align and Distill: A Unified Framework for Domain Adaptive Object Detection](https://arxiv.org/abs/2403.12029). It is an extension of the [Caltech Fish Counting Dataset](../CFC/) (ECCV 2022) that includes additional data for unsupervised domain adaptation.
 
 Below we provide download links for all data and annotations. Please see the [Align and Distill (ALDI)](https://github.com/justinkay/aldi) codebase to train DAOD models on CFC-DAOD.
 
@@ -52,3 +52,24 @@ Data can be downloaded from CaltechDATA using the following links.
 [CFC Channel (target) train labels](https://data.caltech.edu/records/bseww-80110/files/cfc_channel_train.json?download=1)
 
 [CFC Channel (target) test labels](https://data.caltech.edu/records/bseww-80110/files/cfc_channel_test.json?download=1)
+
+## Reference
+
+#### [Align and Distill: Unifying and Improving Domain Adaptive Object Detection](https://arxiv.org/abs/2403.12029)
+
+[Justin Kay](https://justinkay.github.io), [Timm Haucke](https://timm.haucke.xyz/), [Suzanne Stathatos](https://suzanne-stathatos.github.io/), [Siqi Deng](https://www.amazon.science/author/siqi-deng), [Erik Young](https://home.tu.org/users/erikyoung), [Pietro Perona](https://scholar.google.com/citations?user=j29kMCwAAAAJ), [Sara Beery](https://beerys.github.io/), and [Grant Van Horn](https://gvanhorn38.github.io/).
+
+Object detectors often perform poorly on data that differs from their training set. Domain adaptive object detection (DAOD) methods have recently demonstrated strong results on addressing this challenge. Unfortunately, we identify systemic benchmarking pitfalls that call past results into question and hamper further progress: (a) Overestimation of performance due to underpowered baselines, (b) Inconsistent implementation practices preventing transparent comparisons of methods, and (c) Lack of generality due to outdated backbones and lack of diversity in benchmarks. We address these problems by introducing: (1) A unified benchmarking and implementation framework, Align and Distill (ALDI), enabling comparison of DAOD methods and supporting future development, (2) A fair and modern training and evaluation protocol for DAOD that addresses benchmarking pitfalls, (3) A new DAOD benchmark dataset, CFC-DAOD, enabling evaluation on diverse real-world data, and (4) A new method, ALDI++, that achieves state-of-the-art results by a large margin. ALDI++ outperforms the previous state-of-the-art by +3.5 AP50 on Cityscapes → Foggy Cityscapes, +5.7 AP50 on Sim10k → Cityscapes (where ours is the only method to outperform a fair baseline), and +2.0 AP50 on CFC Kenai → Channel. Our framework, dataset, and state-of-the-art method offer a critical reset for DAOD and provide a strong foundation for future research. 
+
+If you find our work useful in your research please consider citing our paper:
+
+```
+@misc{kay2024align,
+      title={Align and Distill: Unifying and Improving Domain Adaptive Object Detection}, 
+      author={Justin Kay and Timm Haucke and Suzanne Stathatos and Siqi Deng and Erik Young and Pietro Perona and Sara Beery and Grant Van Horn},
+      year={2024},
+      eprint={2403.12029},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
