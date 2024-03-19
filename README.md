@@ -21,3 +21,14 @@ This repository includes resources for The Caltech Fish Counting Dataset.
     year      = {2022}
 }
 ```
+
+```
+@misc{kay2024align,
+      title={Align and Distill: Unifying and Improving Domain Adaptive Object Detection}, 
+      author={Justin Kay and Timm Haucke and Suzanne Stathatos and Siqi Deng and Erik Young and Pietro Perona and Sara Beery and Grant Van Horn},
+      year={2024},
+      eprint={2403.12029},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
