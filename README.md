@@ -9,7 +9,7 @@ This repository includes resources for The Caltech Fish Counting Dataset.
     - Introduced in [The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting](https://arxiv.org/abs/2207.09295) (ECCV 2022).
 
 - [Caltech Fish Counting – Domain Adaptive Object Detection (CFC-DAOD)](./CFC-DAOD/) 
-    - Introduced in [Align and Distill: A Unified Framework for Domain Adaptive Object Detection]() (2024, Preprint coming soon).
+    - Introduced in [Align and Distill: Unifying and Improving Domain Adaptive Object Detection](https://arxiv.org/abs/2403.12029) (Preprint 2024).
 
 # References
 
