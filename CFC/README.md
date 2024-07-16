@@ -3,91 +3,42 @@
 
 # The Caltech Fish Counting Dataset
 
-This repository includes resources for [The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting](https://arxiv.org/abs/2207.09295) (ECCV 2022):
-- [x] Links to download the dataset and annotations
-- [x] Evaluation code to reproduce our results and evaluate new algorithms
-- [x] A script to convert raw sonar frames into the enhanced format used by the Baseline++ method in the paper
+### Updates
+
+- **2024-07-16:** Version 1.1 released! This version includes exactly the same data as the original release, but focuses on improving the ease of access and dataset setup. These updates include:
+    - Individual downloads for each training, validation, and testing location (vs. one large download in v1.0)
+    - Pre-processed images to reproduce our Baseline++ results (vs. required conversion step in v1.0)
+    - COCO and YOLO-formatted labels for training object detectors without data wrangling (vs. MOTChallenge-only labels in v1.0)
+
+## Overview
+
+Official resources for [The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting](https://arxiv.org/abs/2207.09295) (ECCV 2022).
 
 ## Data Download
 
 Data can be downloaded from CaltechDATA using the following links.
 
-[Training, validation, and testing images [123 GB]](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_frames.tar.gz?download=1)
+**Images**
 
-- Running `md5sum` on the tar.gz file should produce: `176648e618fc5013db972aa7ded01517  fish_counting_frames.tar.gz`
+| Image Format  | Data Subset |
+|---|---|
+| Raw (1-channel grayscale, Baseline format) | [Kenai (train/validation)](https://data.caltech.edu/records/g945x-41103/files/kenai.tar?download=1) \| [Rightbank (test)](https://data.caltech.edu/records/g945x-41103/files/rightbank.tar?download=1) \| [Channel (test)](https://data.caltech.edu/records/g945x-41103/files/channel.tar?download=1) \| [Elwha (test)](https://data.caltech.edu/records/g945x-41103/files/elwha.tar?download=1) \| [Nushagak (test)](https://data.caltech.edu/records/g945x-41103/files/nushagak.tar?download=1) |
+| 3-channel, Baseline++ format | [Kenai (train/validation)](https://data.caltech.edu/records/g945x-41103/files/kenai-3channel.tar?download=1) \| [Rightbank (test)](https://data.caltech.edu/records/g945x-41103/files/rightbank-3channel.tar?download=1) \| [Channel (test)](https://data.caltech.edu/records/g945x-41103/files/channel-3channel.tar?download=1) \| [Elwha (test)](https://data.caltech.edu/records/g945x-41103/files/elwha-3channel.tar?download=1) \| [Nushagak (test)](https://data.caltech.edu/records/g945x-41103/files/nushagak-3channel.tar?download=1) |
 
-- We also make available a [Tiny Dataset [1.44 GB]](https://data.caltech.edu/records/1y23m-j8r69/files/tiny_dataset.tar.gz?download=1) which is a subset of the larger dataset, for exploring the dataset without downloading the entire thing. It includes data from all 6 river locations/subsets (elwha, kenai-channel, kenai-rightbank, kenai-train, kenai-val, nushagak). It has 20 clips (videos) from each river and up to 50 consecutive frames from each clip. The formatting, etc. of each of the subdirectories and file structure follow the formats listed below. Running `md5sum` on the tar.gz file should produce `6ae6062d50a90d4b084ebe476a392c0e tiny_dataset.tar.gz`
 
-[Metadata [54 KB]](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_metadata.tar.gz?download=1)
+**Labels**
 
-- Running `md5sum` on the tar.gz file should produce: `152286bd6f25f965aadf41e8a0c44140  fish_counting_metadata.tar.gz`
+| Label Format  | Downloads |
+|---|---|
+| YOLO | [Labels (.txt)](https://data.caltech.edu/records/g945x-41103/files/yolo_annotations_v1.1.zip?download=1) \| [File lists](https://data.caltech.edu/records/g945x-41103/files/file_lists_v1.1.zip?download=1) \| [YAML](https://data.caltech.edu/records/g945x-41103/files/cfc_v1.1.yaml?download=1) (all are required)|
+| COCO | [Labels (.json)](https://data.caltech.edu/records/g945x-41103/files/coco_annotations_v1.1.zip?download=1) |
+| MOTChallenge | [Labels (.txt)](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_annotations.tar.gz?download=1) |
 
-[Annotations [5.1 MB]](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_annotations.tar.gz?download=1)
+<details closed>
+<summary><b>MOTChallenge format details</b></summary>
 
-- Running `md5sum` on the tar.gz file should produce: `34c6bbd5e9187f05bfc0be72df002b19  fish_counting_annotations.tar.gz`
+For MOTChallenge annotations, we use the default directory structure as described [here](https://github.com/JonathonLuiten/TrackEval/tree/master/docs/MOTChallenge-Official#data-format). After extracting the `tar.gz`, the directory structure is as follows:
 
-[Coco-style Annotations [11 MB]](https://data.caltech.edu/records/1y23m-j8r69/files/coco_formatted_annotations.tar.gz?download=1)
-
-- Running `md5sum` on the tar.gz file should produce: `92694f9df235cf1e089f65e06faa9c82 coco_formatted_annotations.tar.gz`
-- Note that these do not currently have track IDs
-
-## Data Format
-
-### Images
-
-Frames are provided as single-channel JPGs. After extracting the `tar.gz`, frames are organized as follows. Each location described in the paper -- Kenai Left Bank (training & validation), Kenai Right Bank, Kenai Channel, Nushagak, and Elwha -- has its own directory, with subdirectories for each video clip at that location.
-
-```
-frames/
-    raw/
-        kenai-train/
-            One directory per video sequence in the training set.
-                Images are named by frame index in the video clip, e.g. 0.jpg, 1.jpg ...
-        kenai-val/
-            One directory per video sequence in the validation set.
-                0.jpg, 1.jpg ...
-        kenai-rightbank/
-            ...
-        kenai-channel/
-            ...
-        nushagak/
-            ...
-        elwha/
-            ...
-```     
-
-The 3-channel frames used by our Baseline++ method can be generated using `convert.py`:
-
-```
-python convert.py --in_dir PATH/TO/frames/raw --out_dir PATH/TO/OUTPUT/DIRECTORY
-```
-
-The directory structure will be maintained.
-
-### Metadata
-
-Clip-level metadata is provided for each video clip in the dataset. One JSON file is provided for each location: `kenai-train.json`, `kenai-val.json`, `kenai-rightbank.json`, `kenai-channel.json`, `nushagak.json`, and `elwha.json`. Each JSON file contains a list of dictionaries, one per video clip. Each entry contains the following metadata:
-
-```
-{   // Information for a single clip
-    "clip_name" :              // Unique ID for this clip; matches the name of the directory containing image frames
-    "num_frames":              // Number of frames in the video clip
-    "upstream_direction" :     // Either `left` or `right`
-    "width":                   // Image width in pixels
-    "height":                  // Image width in pixels
-    "framerate":               // Video frame rate, in frames per second
-    "x_meter_start":           // Meter distance from the sonar camera at x = 0
-    "x_meter_stop":            // Meter distance from the sonar camera at x = width-1
-    "y_meter_start":           // Meter distance from the sonar camera at y = 0
-    "y_meter_stop":            // Meter distance from the sonar camera at y = height-1
-}
-```
-
-### Annotations
-
-We provide annotations in COCO format as well as  MOTChallenge format. For both, we use the default directory structure as described [here](https://github.com/JonathonLuiten/TrackEval/tree/master/docs/MOTChallenge-Official#data-format). After extracting the `tar.gz`, the directory structure is as follows:
-
-#### MOTChallenge
 ```
 annotations/
     kenai-train/
@@ -118,58 +69,116 @@ The world coordinates `x,y,z` are ignored for 2D data and are filled with -1. Fo
 1, 8, 875.49, 399.98, 95.303, 233.93, -1, -1, -1, -1
 ```
 
-#### COCO
-```
-coco_formatted_annotations/
-    kenai-train/
-        coco.json
-    kenai-val/
-        coco.json
-    kenai-rightbank/
-        ...
-    kenai-channel/
-        ...
-    nushagak/
-        ...
-    elwha/
-        ...
-```
+</details>
 
-Where each `coco.json` file includes all of the regular information regarding image labels and annotation labels, with the addition that each image_label also has a `dir_name` corresponding to the directory name of the video sequence in the training set.
+<details closed>
+<summary><b>Additional metadata</b></summary>
+
+We also provide clip-level metadata for each video clip in the dataset: 
+
+[Additional Metadata [54 KB]](https://data.caltech.edu/records/1y23m-j8r69/files/fish_counting_metadata.tar.gz?download=1)
+
+One JSON file is provided for each location: `kenai-train.json`, `kenai-val.json`, `kenai-rightbank.json`, `kenai-channel.json`, `nushagak.json`, and `elwha.json`. Each JSON file contains a list of dictionaries, one per video clip. Each entry contains the following metadata:
 
 ```
-{
-    "images": [
-        {
-            "dir_name": "2018-06-01-JD152_LeftFar_Stratum2_Set1_LO_2018-06-01_191003_0_280",
-            "file_name": "0.jpg",
-            "height": 1915,
-            "width": 781,
-            "id": 0
-    ...
-        "categories": [
-        {
-            "supercategory": "",
-            "id": 1,
-            "name": "fish"
-        }
-    ],
-    "annotations": [
-        {
-            "id": 1,
-            "image_id": 17,
-            "bbox": [
-                241.0,
-                1851.0,
-                15.0,
-                10.0
-            ],
-            "area": 150,
-            "iscrowd": 0,
-            "category_id": 1
-        },
-   ...
+{   // Information for a single clip
+    "clip_name" :              // Unique ID for this clip; matches the name of the directory containing image frames
+    "num_frames":              // Number of frames in the video clip
+    "upstream_direction" :     // Either `left` or `right`
+    "width":                   // Image width in pixels
+    "height":                  // Image width in pixels
+    "framerate":               // Video frame rate, in frames per second
+    "x_meter_start":           // Meter distance from the sonar camera at x = 0
+    "x_meter_stop":            // Meter distance from the sonar camera at x = width-1
+    "y_meter_start":           // Meter distance from the sonar camera at y = 0
+    "y_meter_stop":            // Meter distance from the sonar camera at y = height-1
 }
+```
+
+</details>
+
+## Object Detection
+
+### Training YOLOv5 on CFC
+
+To reproduce our object detection results, first clone and install [YOLOv5](https://github.com/ultralytics/yolov5).
+
+Download the dataset and arrange it in the following directory structure:
+
+```
+yolov5/
+    data/
+        cfc_v1.1/
+            images/ # un-tar'd images, either {location}.tar (Baseline) or {location}-3channel.tar (Baseline++).
+                kenai/
+                channel/
+                ...
+            labels/ # un-tar'd yolo_annotations_v1.1.zip
+                kenai/
+                channel/
+                ... 
+            file_lists/
+                ...
+            cfc_v1.1.yaml
+```
+
+Then replicate our training settings with:
+
+```
+python train.py --img 896 --epochs 150 --data data/cfc_v1.1/cfc_v1.1.yaml --weights yolov5m.pt
+```
+
+### Leaderboard
+
+All metrics shown are AP@IoU=0.5 ("AP50").
+
+| Method  | Kenai Validation | Rightbank Test | Channel Test | Elwha Test | Nushagak Test | Test Overall (Macro-Average)  | 
+|---|---|---|---|---|---|---|
+| CFC Baseline | 66.4 | 57.7 | 32.0 | 39.9 | 70.6 | 50.1 |
+| CFC Baseline++ | 68.0 | 87.1 | 65.1 | 85.5 | 74.7 | 78.1 |
+
+Please submit a PR to add yourself to the leaderboard!
+
+## Multi-Object Tracking and Counting
+
+More documentation, tracker code, and leaderboard coming soon.
+
+## MOT Evaluation
+
+Clone the repo **with submodules** to enable MOT evaluation:
+
+```
+git clone --recursive https://github.com/visipedia/caltech-fish-counting.git
+// or 
+git clone --recursive git@github.com:visipedia/caltech-fish-counting.git
+```
+
+If you already cloned, submodules can be retroactively intialized with:
+
+```
+git submodule init
+git submodule update
+```
+
+We provide evaluation code using the [TrackEval](https://github.com/JonathonLuiten/TrackEval) codebase. In addition to the [CLEAR](https://link.springer.com/article/10.1155/2008/246309), [ID](https://arxiv.org/abs/1609.01775), and [HOTA](https://arxiv.org/abs/2009.07736) tracking metrics, we extend the TrackEval codebase with a custom metric `nMAE` as described in the paper:
+
+<img src="https://render.githubusercontent.com/render/math?math=nMAE = \frac{\frac{1}{N}\sum_{i=1}^{N} E_i}{\frac{1}{N}\sum_{i=1}^{N} \hat{z}_i} = \frac{\sum_{i=1}^{N} E_i}{\sum_{i=1}^{N} \hat{z}_i}">, 
+
+where <img src="https://render.githubusercontent.com/render/math?math=N"> is the number of video clips, <img src="https://render.githubusercontent.com/render/math?math=E_i"> is the absolute counting error for each clip:
+
+<img src="https://render.githubusercontent.com/render/math?math=E_i = | z_{left_i} - \hat{z}_{left_i} | \%2B | z_{right_i} - \hat{z}_{right_i} |">, 
+
+and <img src="https://render.githubusercontent.com/render/math?math=\hat{z}_i"> is the ground truth count for clip <img src="https://render.githubusercontent.com/render/math?math=i">:
+
+<img src="https://render.githubusercontent.com/render/math?math=\hat{z}_i = \hat{z}_{left_i} \%2B \hat{z}_{right_i}">
+
+Run the evaluation script from the command line to reproduce the results from the paper:
+
+```
+python evaluate.py --results_dir PATH/TO/results --anno_dir PATH/TO/annotations --metadata_dir PATH/TO/metadata --tracker baseline
+```
+```
+python evaluate.py --results_dir PATH/TO/results --anno_dir PATH/TO/annotations --metadata_dir PATH/TO/metadata --tracker baseline++
 ```
 
 ### Prediction Results
@@ -199,48 +208,6 @@ results/
         ...
     elwha/
         ...
-```
-
-## Repository Setup and Usage
-
-### Installation
-
-Clone the repo **with submodules** to enable MOT evaluation:
-
-```
-git clone --recursive https://github.com/visipedia/caltech-fish-counting.git
-// or 
-git clone --recursive git@github.com:visipedia/caltech-fish-counting.git
-```
-
-If you already cloned, submodules can be retroactively intialized with:
-
-```
-git submodule init
-git submodule update
-```
-
-### Evaluation
-
-We provide evaluation code using the [TrackEval](https://github.com/JonathonLuiten/TrackEval) codebase. In addition to the [CLEAR](https://link.springer.com/article/10.1155/2008/246309), [ID](https://arxiv.org/abs/1609.01775), and [HOTA](https://arxiv.org/abs/2009.07736) tracking metrics, we extend the TrackEval codebase with a custom metric `nMAE` as described in the paper:
-
-<img src="https://render.githubusercontent.com/render/math?math=nMAE = \frac{\frac{1}{N}\sum_{i=1}^{N} E_i}{\frac{1}{N}\sum_{i=1}^{N} \hat{z}_i} = \frac{\sum_{i=1}^{N} E_i}{\sum_{i=1}^{N} \hat{z}_i}">, 
-
-where <img src="https://render.githubusercontent.com/render/math?math=N"> is the number of video clips, <img src="https://render.githubusercontent.com/render/math?math=E_i"> is the absolute counting error for each clip:
-
-<img src="https://render.githubusercontent.com/render/math?math=E_i = | z_{left_i} - \hat{z}_{left_i} | \%2B | z_{right_i} - \hat{z}_{right_i} |">, 
-
-and <img src="https://render.githubusercontent.com/render/math?math=\hat{z}_i"> is the ground truth count for clip <img src="https://render.githubusercontent.com/render/math?math=i">:
-
-<img src="https://render.githubusercontent.com/render/math?math=\hat{z}_i = \hat{z}_{left_i} \%2B \hat{z}_{right_i}">
-
-Run the evaluation script from the command line to reproduce the results from the paper:
-
-```
-python evaluate.py --results_dir PATH/TO/results --anno_dir PATH/TO/annotations --metadata_dir PATH/TO/metadata --tracker baseline
-```
-```
-python evaluate.py --results_dir PATH/TO/results --anno_dir PATH/TO/annotations --metadata_dir PATH/TO/metadata --tracker baseline++
 ```
 
 ## Reference
